@@ -7,9 +7,8 @@ include 'config/database.php';
 // include_once 'class/product.php';
 
 // $query = "SELECT * FROM products";
-$query = "SELECT category.category_name, category.category_value, products.product_name, products.product_sku
-, products.product_price FROM products INNER JOIN category ON category.category_id=products.category_id";
-
+$query = "SELECT products.product_id, category.category_name, category.category_value,
+ products.product_name, products.product_sku, products.product_price FROM category INNER JOIN products ON category.product_id = products.product_id";
 
 /* Execute the query */
 $result = $mysqli->query($query);
@@ -27,8 +26,9 @@ while ($row = mysqli_fetch_assoc($result)) {
 
     extract($row);
     $e = array(
+        "product_id" => $product_id,
         "product_sku" => $product_sku,
-        "product_name" => $product_name,        
+        "product_name" => $product_name,
         "product_price" => $product_price,
         "category_value" => $category_value,
         "category_name" => $category_name,
@@ -36,6 +36,6 @@ while ($row = mysqli_fetch_assoc($result)) {
     );
     array_push($productsArr, $e);
 
-    }
+}
 // JSON Stringfy
 echo json_encode($productsArr);
